@@ -1,0 +1,26 @@
+services:
+  mongodb:
+    image: mongo:6.0
+    container_name: mongo-container
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+  
+  backend:
+    build: .
+    container_name: pokemon-api-backend
+    ports:
+      - "5000:5000"
+    command: ["./wait-for-it.sh", "mongo-container:27017", "--", "npm", "start"]
+    environment:
+      - DB_URI="mongodb://root:password@mongo-container:27017/pokemonDB"
+    depends_on:
+    - mongodb
+
+
+volumes:
+  mongo-data:
