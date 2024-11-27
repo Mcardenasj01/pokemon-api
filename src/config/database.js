@@ -1,12 +1,17 @@
+require('dotenv').config(); // Carga las variables del archivo .env
+console.log('DB_URI:', process.env.DB_URI);
+
 const mongoose = require('mongoose');
 
-function connectDB() {
-    mongoose.connect(process.env.DB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => console.log('MongoDB connected'))
-    .catch((err) => {
-        console.error('MongoDB connection error:', err);
-        setTimeout(connectDB, 5000); // Intentar reconectar después de 5 segundos
-    });
-}
+const connectDB = async () => {
+    try {
+        const dbURI = process.env.DB_URI;
+        await mongoose.connect(dbURI);
+        console.log('MongoDB connected successfully!');
+    } catch (err) {
+        console.error('MongoDB connection error: ', err);
+        process.exit(1); // Detenemos la ejecución si la conexión falla
+    }
+};
 
 module.exports = connectDB;

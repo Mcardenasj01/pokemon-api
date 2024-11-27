@@ -17,10 +17,9 @@ services:
       - "5000:5000"
     command: ["./wait-for-it.sh", "mongo-container:27017", "--", "npm", "start"]
     environment:
-      - DB_URI="mongodb://root:password@mongo-container:27017/pokemonDB"
+      - DB_URI=mongodb://mongo-container:27017/pokemonDB
     depends_on:
-    - mongodb
-
+      - mongodb
 
 volumes:
   mongo-data:
